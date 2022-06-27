@@ -9,10 +9,16 @@ import SwiftUI
 import RealmSwift
 struct CountryRowView: View {
     @ObservedRealmObject var country: Country
+    @FocusState var isFocused: Bool?
     
     var body: some View {
-        TextField("New Country", text: $country.name)
-            .textFieldStyle(.roundedBorder)
+        HStack {
+            TextField("New Country", text: $country.name)
+                .focused($isFocused, equals: true)
+                .textFieldStyle(.roundedBorder)
+            Spacer()
+            Text("\(country.city.count) cities")
+        }
             .padding()
             .frame(height: 30)
     }

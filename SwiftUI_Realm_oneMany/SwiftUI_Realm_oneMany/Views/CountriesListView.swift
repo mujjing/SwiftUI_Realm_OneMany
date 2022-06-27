@@ -18,8 +18,12 @@ struct CountriesListView: View {
                     Text("Tap on the \(Image(systemName: "plus.circle.fill")) button above to create a new Country")
                 } else {
                     List {
-                        ForEach(countries) { country in
-                            CountryRowView(country: country)
+                        ForEach(countries.sorted(byKeyPath: "name")) { country in
+                            NavigationLink {
+                                CitiesListView(country: country)
+                            } label: {
+                                CountryRowView(country: country, isFocused: _isFocused)
+                            }
                         }
                         .listRowSeparator(.hidden)
                     }
@@ -27,6 +31,7 @@ struct CountriesListView: View {
                 }
                 Spacer()
             }
+            .animation(.default, value: countries)
             .navigationTitle("Countries")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -35,6 +40,17 @@ struct CountriesListView: View {
                     } label: {
                         Image(systemName: "plus.circle.fill")
                             .font(.title2)
+                    }
+                }
+                ToolbarItemGroup(placement: .keyboard) {
+                    HStack {
+                        Spacer()
+                        Button {
+                            isFocused = nil
+                        } label: {
+                            Image(systemName: "keyboard.chevron.compact.down")
+                        }
+
                     }
                 }
             }
